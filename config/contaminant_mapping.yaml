@@ -1,0 +1,127 @@
+contaminants:
+  lead:
+    display_name: "Lead"
+    chemical_symbol: "Pb"
+    category: "Inorganic Contaminant"
+    unit: "ppb"
+    mcl: null
+    mclg: 0.0
+    action_level: 15.0
+    warning_threshold: 10.0
+    critical_threshold: 15.0
+    description: "Corrosion of household plumbing systems; erosion of natural deposits"
+
+  copper:
+    display_name: "Copper"
+    chemical_symbol: "Cu"
+    category: "Inorganic Contaminant"
+    unit: "ppm"
+    mcl: null
+    mclg: 1.3
+    action_level: 1.3
+    warning_threshold: 1.0
+    critical_threshold: 1.3
+    description: "Corrosion of household plumbing systems; erosion of natural deposits"
+
+  fluoride:
+    display_name: "Fluoride"
+    chemical_symbol: "F"
+    category: "Inorganic Contaminant"
+    unit: "ppm"
+    mcl: 4.0
+    mclg: 4.0
+    secondary_mcl: 2.0
+    warning_threshold: 1.5
+    critical_threshold: 4.0
+    description: "Water additive which promotes strong teeth; erosion of natural deposits"
+
+  tthm:
+    display_name: "Total Trihalomethanes (TTHM)"
+    chemical_symbol: "TTHM"
+    category: "Disinfection Byproduct"
+    unit: "ppb"
+    mcl: 80.0
+    mclg: null
+    action_level: null
+    warning_threshold: 60.0
+    critical_threshold: 80.0
+    description: "By-product of drinking water chlorination"
+
+  haa5:
+    display_name: "Haloacetic Acids (HAA5)"
+    chemical_symbol: "HAA5"
+    category: "Disinfection Byproduct"
+    unit: "ppb"
+    mcl: 60.0
+    mclg: null
+    action_level: null
+    warning_threshold: 45.0
+    critical_threshold: 60.0
+    description: "By-product of drinking water chlorination"
+
+  nitrate:
+    display_name: "Nitrate (as Nitrogen)"
+    chemical_symbol: "NO3-N"
+    category: "Inorganic Contaminant"
+    unit: "ppm"
+    mcl: 10.0
+    mclg: 10.0
+    action_level: null
+    warning_threshold: 7.0
+    critical_threshold: 10.0
+    description: "Runoff from fertilizer use; leaching from septic tanks, sewage"
+
+  turbidity:
+    display_name: "Turbidity"
+    chemical_symbol: "NTU"
+    category: "Microbiological / Physical"
+    unit: "NTU"
+    mcl: 1.0
+    mclg: null
+    action_level: 0.3
+    warning_threshold: 0.25
+    critical_threshold: 0.30
+    description: "Soil runoff; measure of water cloudiness and filtration efficacy"
+
+  chlorine_residual:
+    display_name: "Chlorine (Disinfectant Residual)"
+    chemical_symbol: "Cl2"
+    category: "Disinfectant Residual"
+    unit: "ppm"
+    mcl: 4.0
+    mclg: 4.0
+    action_level: null
+    warning_threshold: 3.2
+    critical_threshold: 4.0
+    description: "Water additive used to control microbes"
+
+  barium:
+    display_name: "Barium"
+    chemical_symbol: "Ba"
+    category: "Inorganic Contaminant"
+    unit: "ppm"
+    mcl: 2.0
+    mclg: 2.0
+    action_level: null
+    warning_threshold: 1.5
+    critical_threshold: 2.0
+    description: "Discharge of drilling wastes; discharge from metal refineries"
+
+  atrazine:
+    display_name: "Atrazine"
+    chemical_symbol: "C8H14ClN5"
+    category: "Synthetic Organic Contaminant"
+    unit: "ppb"
+    mcl: 3.0
+    mclg: 3.0
+    action_level: null
+    warning_threshold: 2.0
+    critical_threshold: 3.0
+    description: "Runoff from herbicide used on row crops"
+
+unit_conversions:
+  ppm_to_ppb: 1000.0
+  ppb_to_ppm: 0.001
+  mg_l_to_ug_l: 1000.0
+  ug_l_to_mg_l: 0.001
+

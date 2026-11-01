@@ -1,0 +1,60 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Virtual Environments & Package Managers
+.venv/
+venv/
+env/
+.poetry_config/
+.poetry_cache/
+
+# DuckDB Database files & locks
+database/*.duckdb
+database/*.duckdb.wal
+database/*.duckdb.tmp
+*.duckdb
+*.duckdb.wal
+*.duckdb.tmp
+
+# Generated Parquet datasets (reproducible from pipeline)
+data/bronze/*.parquet
+data/silver/*.parquet
+data/gold/*.parquet
+!data/bronze/.gitkeep
+!data/silver/.gitkeep
+!data/gold/.gitkeep
+
+# Streamlit
+.streamlit/
+
+# Testing & Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# IDE & Editor Settings
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# macOS / OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db

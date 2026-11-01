@@ -1,0 +1,73 @@
+pipeline:
+  name: "waterone-data-engine"
+  version: "1.0.0"
+
+water_system:
+  pws_id: "KS2009110"
+  pws_name: "WATER DISTRICT 1 OF JOHNSON CO"
+  state: "KS"
+  county: "Johnson"
+  population_served: 490000
+  service_connections: 157481
+
+paths:
+  landing_dir: "data/landing"
+  landing_ccr: "data/landing/ccr"
+  landing_kdhe: "data/landing/kdhe"
+  bronze_dir: "data/bronze"
+  silver_dir: "data/silver"
+  gold_dir: "data/gold"
+  database_path: "database/water_lakehouse.duckdb"
+
+usgs_telemetry:
+  service_url: "https://waterservices.usgs.gov/nwis/iv/"
+  stations:
+    kansas_river_desoto:
+      site_id: "06892350"
+      site_name: "Kansas River at De Soto, KS"
+      latitude: 38.98000556
+      longitude: -94.9669167
+    missouri_river_parkville:
+      site_id: "06893000"
+      site_name: "Missouri River at Parkville, MO"
+      latitude: 39.1869444
+      longitude: -94.6869444
+  parameters:
+    "00060":
+      name: "streamflow_cfs"
+      description: "Discharge, cubic feet per second"
+      unit: "cfs"
+    "00095":
+      name: "specific_conductance_us_cm"
+      description: "Specific conductance, uS/cm at 25C"
+      unit: "uS/cm"
+    "00010":
+      name: "water_temperature_c"
+      description: "Temperature, water, degrees Celsius"
+      unit: "deg_C"
+    "63680":
+      name: "turbidity_fnu"
+      description: "Turbidity, water, unfiltered, monochrome near infra-red LED light"
+      unit: "FNU"
+
+source_blending_weights:
+  missouri_river: 0.514
+  wolcott_collector: 0.275
+  kansas_river: 0.196
+  wells: 0.016
+
+anomaly_detection:
+  model: "IsolationForest"
+  contamination: 0.05
+  random_state: 42
+  features:
+    - "blended_turbidity_ntu"
+    - "turbidity_7d_ma"
+    - "turbidity_30d_ma"
+    - "turbidity_volatility_7d"
+    - "river_discharge_cfs"
+    - "river_temp_c"
+    - "river_conductance_us_cm"
+  pre_breach_warning_threshold: 65.0
+  critical_alert_threshold: 85.0
+
