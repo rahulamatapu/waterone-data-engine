@@ -62,7 +62,10 @@ class WaterQualityAnomalyDetector:
         if df_features is None:
             feat_pq = self.gold_dir / "mart_ml_feature_store.parquet"
             if not feat_pq.exists():
-                raise FileNotFoundError(f"Feature store not found at {feat_pq}. Run feature store builder first.")
+                raise FileNotFoundError(
+                    f"Prerequisite Gold feature store not found at {feat_pq}. "
+                    "Please run 'poetry run waterpipe transform' or 'poetry run waterpipe run' first."
+                )
             df_features = pd.read_parquet(feat_pq)
 
         if len(df_features) < 10:

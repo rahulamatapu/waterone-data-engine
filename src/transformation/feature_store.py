@@ -41,7 +41,10 @@ class GoldFeatureStoreBuilder:
         """
         tel_pq = self.silver_dir / "fact_river_telemetry.parquet"
         if not tel_pq.exists():
-            return pd.DataFrame()
+            raise FileNotFoundError(
+                f"Prerequisite Silver table not found at {tel_pq}. "
+                "Please run 'poetry run waterpipe transform' or 'poetry run waterpipe run' first."
+            )
 
         df_tel = pd.read_parquet(tel_pq)
         df_tel["date"] = pd.to_datetime(df_tel["timestamp"]).dt.date
