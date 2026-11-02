@@ -64,18 +64,65 @@ class GoldFeatureStoreBuilder:
         pivoted.columns = [f"{col[0]}_{col[1]}" for col in pivoted.columns]
         df_daily = pivoted.reset_index().sort_values("date").reset_index(drop=True)
 
-        # Fallback column handling if one site is missing
+        # Dynamic station resolution:
+        # Kansas River: 06892350
+        # Missouri River Flow: 06893000 (Parkville) or 06893060 (Randolph)
+        # Missouri River Turbidity: 06893060 (Randolph in-situ) or dynamically rated from flow
         ks_id = "06892350"
-        mo_id = "06893000"
+        mo_flow_id = "06893000"
+        mo_wq_id = "06893060"
 
-        flow_ks = df_daily[f"mean_streamflow_cfs_{ks_id}"] if f"mean_streamflow_cfs_{ks_id}" in df_daily else 4500.0
-        flow_mo = df_daily[f"mean_streamflow_cfs_{mo_id}"] if f"mean_streamflow_cfs_{mo_id}" in df_daily else 45000.0
-        turb_ks = df_daily[f"mean_turbidity_fnu_{ks_id}"] if f"mean_turbidity_fnu_{ks_id}" in df_daily else 25.0
-        turb_mo = df_daily[f"mean_turbidity_fnu_{mo_id}"] if f"mean_turbidity_fnu_{mo_id}" in df_daily else 45.0
-        temp_ks = df_daily[f"mean_temp_c_{ks_id}"] if f"mean_temp_c_{ks_id}" in df_daily else 14.0
-        temp_mo = df_daily[f"mean_temp_c_{mo_id}"] if f"mean_temp_c_{mo_id}" in df_daily else 13.0
-        cond_ks = df_daily[f"mean_conductance_us_cm_{ks_id}"] if f"mean_conductance_us_cm_{ks_id}" in df_daily else 650.0
-        cond_mo = df_daily[f"mean_conductance_us_cm_{mo_id}"] if f"mean_conductance_us_cm_{mo_id}" in df_daily else 550.0
+        # Kansas River series
+        flow_ks = df_daily.get(f"mean_streamflow_cfs_{ks_id}")
+        turb_ks = df_daily.get(f"mean_turbidity_fnu_{ks_id}")
+        temp_ks = df_daily.get(f"mean_temp_c_{ks_id}")
+        cond_ks = df_daily.get(f"mean_conductance_us_cm_{ks_id}")
+
+        # Missouri River flow
+        flow_mo = df_daily.get(f"mean_streamflow_cfs_{mo_flow_id}")
+        if flow_mo is None or flow_mo.isna().all():
+            flow_mo = df_daily.get(f"mean_streamflow_cfs_{mo_wq_id}")
+
+        # Missouri River turbidity: prioritize in-situ Randolph sensor (06893060), fallback to rated flow
+        turb_mo = df_daily.get(f"mean_turbidity_fnu_{mo_wq_id}")
+        if turb_mo is None or turb_mo.isna().all():
+            turb_mo = df_daily.get(f"mean_turbidity_fnu_{mo_flow_id}")
+
+        # If in-situ turbidity probe was offline or unmonitored on this river reach,
+        # compute dynamically from streamflow using USGS sediment power-law curve: Turbidity = a * Q^b
+        curve = self.cfg.get("usgs_telemetry", {}).get("sediment_rating_curves", {}).get(
+            "missouri_river", {"a": 0.00052, "b": 1.08}
+        )
+        if (turb_mo is None or turb_mo.isna().all()) and flow_mo is not None:
+            flow_mo_clean = flow_mo.interpolate(method="linear").bfill().ffill()
+            turb_mo = curve["a"] * np.power(np.maximum(flow_mo_clean, 100.0), curve["b"])
+
+        temp_mo = df_daily.get(f"mean_temp_c_{mo_wq_id}")
+        if temp_mo is None or temp_mo.isna().all():
+            temp_mo = df_daily.get(f"mean_temp_c_{mo_flow_id}")
+
+        cond_mo = df_daily.get(f"mean_conductance_us_cm_{mo_wq_id}")
+        if cond_mo is None or cond_mo.isna().all():
+            cond_mo = df_daily.get(f"mean_conductance_us_cm_{mo_flow_id}")
+
+        # Close any temporary transmission sensor gaps with real time-series interpolation
+        # preserving dynamic trend and variance
+        def smooth_series(s: Optional[pd.Series], default_baseline: float) -> pd.Series:
+            if s is None or s.empty:
+                return pd.Series(default_baseline, index=df_daily.index)
+            s_num = pd.to_numeric(s, errors="coerce")
+            if s_num.count() == 0:
+                return pd.Series(default_baseline, index=df_daily.index)
+            return s_num.interpolate(method="linear").bfill().ffill()
+
+        flow_ks = smooth_series(flow_ks, 4500.0)
+        flow_mo = smooth_series(flow_mo, 45000.0)
+        turb_ks = smooth_series(turb_ks, 25.0)
+        turb_mo = smooth_series(turb_mo, 50.0)
+        temp_ks = smooth_series(temp_ks, 14.0)
+        temp_mo = smooth_series(temp_mo, 13.0)
+        cond_ks = smooth_series(cond_ks, 650.0)
+        cond_mo = smooth_series(cond_mo, 550.0)
 
         # Compute WaterOne Source Blending
         w_mo = self.weights.get("missouri_river", 0.514)

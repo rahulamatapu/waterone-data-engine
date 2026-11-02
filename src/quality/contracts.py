@@ -52,7 +52,7 @@ WaterQualitySampleSchema = DataFrameSchema(
 # 4. River Sensor Telemetry Contract
 RiverTelemetrySchema = DataFrameSchema(
     columns={
-        "site_id": Column(str, Check.isin(["06892350", "06893000"]), nullable=False, coerce=True),
+        "site_id": Column(str, Check.isin(["06892350", "06893000", "06893060"]), nullable=False, coerce=True),
         "streamflow_cfs": Column(float, Check.greater_than_or_equal_to(0), nullable=True, coerce=True),
         "turbidity_fnu": Column(float, Check.greater_than_or_equal_to(0), nullable=True, coerce=True),
         "water_temperature_c": Column(float, Check.in_range(-10.0, 50.0), nullable=True, coerce=True),

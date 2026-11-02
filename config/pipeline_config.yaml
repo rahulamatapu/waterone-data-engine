@@ -27,11 +27,26 @@ usgs_telemetry:
       site_name: "Kansas River at De Soto, KS"
       latitude: 38.98000556
       longitude: -94.9669167
+      role: "flow_and_water_quality"
     missouri_river_parkville:
       site_id: "06893000"
       site_name: "Missouri River at Parkville, MO"
       latitude: 39.1869444
       longitude: -94.6869444
+      role: "streamflow"
+    missouri_river_randolph:
+      site_id: "06893060"
+      site_name: "Missouri River at Randolph, MO"
+      latitude: 39.1558
+      longitude: -94.5208
+      role: "water_quality"
+  sediment_rating_curves:
+    missouri_river:
+      a: 0.00052
+      b: 1.08
+    kansas_river:
+      a: 0.00180
+      b: 1.12
   parameters:
     "00060":
       name: "streamflow_cfs"

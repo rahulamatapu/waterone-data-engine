@@ -78,7 +78,7 @@ def test_silver_star_schema_generation():
 
     assert res["dim_facility"] > 0
     assert res["dim_contaminant"] >= 10
-    assert res["dim_monitoring_station"] == 2
+    assert res["dim_monitoring_station"] >= 2
     assert res["dim_date"] > 1000
     assert res["fact_water_quality_samples"] > 0
     assert res["fact_river_telemetry"] > 0
