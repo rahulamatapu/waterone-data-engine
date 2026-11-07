@@ -55,6 +55,7 @@ class WaterQualityAnomalyDetector:
         self,
         df_features: Optional[pd.DataFrame] = None,
         custom_contamination: Optional[float] = None,
+        persist_to_duckdb: bool = True,
     ) -> pd.DataFrame:
         """
         Trains Isolation Forest on feature store data and outputs scored anomaly events.
@@ -134,11 +135,13 @@ class WaterQualityAnomalyDetector:
         })
 
         output_path = self.gold_dir / "mart_anomaly_events.parquet"
-        df_anom.to_parquet(output_path, index=False, engine="pyarrow")
-
-        # Register in DuckDB
-        with duckdb.connect(str(self.db_path)) as con:
-            con.execute(f"CREATE OR REPLACE VIEW mart_anomaly_events AS SELECT * FROM read_parquet('{output_path}');")
+        if persist_to_duckdb:
+            df_anom.to_parquet(output_path, index=False, engine="pyarrow")
+            try:
+                with duckdb.connect(str(self.db_path)) as con:
+                    con.execute(f"CREATE OR REPLACE VIEW mart_anomaly_events AS SELECT * FROM read_parquet('{output_path}');")
+            except Exception:
+                pass
 
         return df_anom
 
