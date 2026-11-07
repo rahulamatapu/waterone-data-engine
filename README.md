@@ -158,7 +158,7 @@ The platform includes a CLI built with **Click** and **Rich**:
 | `poetry run waterpipe detect` | Train Isolation Forest and compute pre-breach anomaly severity scores |
 | `poetry run waterpipe run` | Execute complete end-to-end DAG (`ingest` $\rightarrow$ `validate` $\rightarrow$ `transform` $\rightarrow$ `detect`) |
 | `poetry run waterpipe query "<sql>"` | Run ad-hoc vectorized SQL queries directly against the DuckDB catalog |
-| `poetry run waterpipe export <mart> <fmt>` | Export Gold marts to `csv`, `json`, or `parquet` (`--dest <path>`) |
+| `poetry run waterpipe export <mart> <output_path> [--format csv\|json\|parquet]` | Export Gold marts to `csv`, `json`, or `parquet` |
 | `poetry run waterpipe dashboard` | Launch the Streamlit Interactive Water Quality Monitor UI |
 
 ### Example CLI Usages:
@@ -167,7 +167,7 @@ The platform includes a CLI built with **Click** and **Rich**:
 poetry run waterpipe query "SELECT date, severity_index, alert_level, primary_contributing_factor FROM mart_anomaly_events ORDER BY severity_index DESC LIMIT 5;"
 
 # Export daily water quality mart to CSV
-poetry run waterpipe export mart_daily_water_quality csv --dest exports/daily_quality.csv
+poetry run waterpipe export mart_daily_water_quality exports/daily_quality.csv --format csv
 ```
 
 ---
