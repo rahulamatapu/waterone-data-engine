@@ -124,7 +124,7 @@ The model converts tree path isolation depths into a human-interpretable severit
 Ensure you have Python 3.12+ and Poetry installed:
 ```bash
 # Clone the repository
-git clone https://github.com/rahul-arulkumar/waterone-data-engine.git
+git clone https://github.com/rahulamatapu/waterone-data-engine.git
 cd waterone-data-engine
 
 # Install dependencies in local virtualenv
