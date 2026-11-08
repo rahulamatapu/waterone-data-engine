@@ -4,6 +4,7 @@
 [![DuckDB 1.0+](https://img.shields.io/badge/duckdb-2.0.0-yellow.svg)](https://duckdb.org/)
 [![Pandera](https://img.shields.io/badge/data%20quality-pandera-orange.svg)](https://pandera.readthedocs.io/)
 [![Streamlit](https://img.shields.io/badge/ui-streamlit-red.svg)](https://streamlit.io/)
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 [![Tests](https://img.shields.io/badge/tests-26%20passed-brightgreen.svg)]()
 
 An end-to-end, zero-cost, local Medallion Architecture water quality data engineering lakehouse, telemetry engine, and pre-breach predictive health monitoring platform for **Water District No. 1 of Johnson County, Kansas (WaterOne, PWS ID: KS2009110)**.
@@ -264,4 +265,7 @@ waterone-data-engine/
 ```
 
 ---
+
+## 📜 License
+This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
 
