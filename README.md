@@ -265,5 +265,3 @@ waterone-data-engine/
 
 ---
 
-## 📜 License
-This project is licensed under the MIT License - see the [LICENSE](file:///Users/rahula/Documents/waterone-data-engine/LICENSE) file for details.
